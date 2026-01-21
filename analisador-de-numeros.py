@@ -1,4 +1,4 @@
-lancamentos = []
+
 
 def mostrar_menu():
 
@@ -10,7 +10,7 @@ def mostrar_menu():
     print("4 - Sair")
     print("***********************")
 
-def inserir_valor():
+def inserir_valor(lancamentos):
 
     valor = int(input("Insira um valor: "))
 
@@ -19,15 +19,16 @@ def inserir_valor():
         
     })
 
-def analisar_lancamentos():
+    return lancamentos
+
+def analisar_lancamentos(lancamentos):
 
     quant_impar = 0
     quant_par = 0
     soma = 0
-    maior = lancamentos[0]["valor"]
 
     if len(lancamentos) == 0:
-        print("Nenhum valor inserido.")
+        return None
 
     else :
         maior = lancamentos[0]["valor"]
@@ -47,36 +48,59 @@ def analisar_lancamentos():
         
         media = soma / len(lancamentos)
 
-        print(f"A soma dos valores inseridos é de {soma}.")
+        return {
+            "soma" : soma,
+            "pares" : quant_par,
+            "impares" : quant_impar,
+            "maior" : maior,
+            "media" : media
+        }
 
-        print(f"Dos quais são {quant_par} Par e {quant_impar} Ímpar.")
+def mostrar_analise(estatistica):
+    print(f"A soma dos valores inseridos é de {estatistica['soma']}.")
+    print(f"Dos quais são {estatistica['pares']} Par e {estatistica['impares']} Ímpar.")
+    print(f"O maior valor inserido foi {estatistica['maior']}.")
+    print(f"A média dos valores inseridos é {estatistica['media']}.")
 
-        print(f"O maior valor inserido foi {maior}.")
-
-        print(f"A média dos valores inseridos é {media}.")
-
-def limpar_lancamentos():
+def limpar_lancamentos(lancamentos):
     confirmacao = input("Você realmente quer apagar todos os lançamentos? s/n ")
 
     if confirmacao == "s":
         lancamentos.clear()
         print("A lista foi resetada.")
     
+    elif confirmacao == "n":
+        print("Operação cancelada.")
+    
+    else:
+        print("Opção Ínvalida.")
 
-while True:
-    mostrar_menu()
-    opcao = input("Digite a opção desejada: ")
-    print(" ")
+    return lancamentos
 
-    if opcao == "1":
-        inserir_valor()
-        
-    elif opcao == "2" :
-        analisar_lancamentos()
+def main():
+    lancamentos = []
+    
+    while True:
+        mostrar_menu()
+        opcao = input("Digite a opção desejada: ")
+        print(" ")
 
-    elif opcao == "3" :
-        limpar_lancamentos()
-        
-    elif opcao == "4" :
-        break 
+        if opcao == "1":
+           lancamentos = inserir_valor(lancamentos)
+            
+        elif opcao == "2" :
+            estatistica = analisar_lancamentos(lancamentos)
+            
+            if estatistica is None:
+                print("Nenhum valor inserido.")
+            else:
+                mostrar_analise(estatistica)
 
+        elif opcao == "3" :
+           lancamentos = limpar_lancamentos(lancamentos)
+            
+        elif opcao == "4" :
+            break 
+
+if __name__ == "__main__":
+    main()
