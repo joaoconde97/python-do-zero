@@ -1,5 +1,4 @@
 
-
 def mostrar_menu():
 
     print("***********************")
@@ -12,7 +11,7 @@ def mostrar_menu():
 
 def inserir_valor(lancamentos):
 
-    valor = int(input("Insira um valor: "))
+    valor = pedir_inteiro("Insira um valor inteiro: ")
 
     lancamentos.append({
         "valor": valor,
@@ -77,30 +76,56 @@ def limpar_lancamentos(lancamentos):
 
     return lancamentos
 
+def ler_opcao():
+    return input("Digite a opção desejada: ")
+
+def tratar_opcao(opcao, lancamentos):
+
+    if opcao == "1":
+           lancamentos = inserir_valor(lancamentos)
+            
+    elif opcao == "2" :
+        estatistica = analisar_lancamentos(lancamentos)
+        
+        if estatistica is None:
+            print("Nenhum valor inserido.")
+        else:
+            mostrar_analise(estatistica)
+
+    elif opcao == "3" :
+        return limpar_lancamentos(lancamentos)
+        
+    elif opcao == "4" :
+        return None 
+
+    else:
+        print("Opção Ínvalida.")
+        return lancamentos
+
+def pedir_inteiro(mensagem):
+    while True:
+        valor = input(mensagem)
+
+        if valor.isdigit():
+            return int(valor)
+
+        else:
+            print("Valor ínvalido, insira um valor inteiro.")
+
 def main():
     lancamentos = []
     
     while True:
         mostrar_menu()
-        opcao = input("Digite a opção desejada: ")
+        opcao = ler_opcao()
         print(" ")
 
-        if opcao == "1":
-           lancamentos = inserir_valor(lancamentos)
-            
-        elif opcao == "2" :
-            estatistica = analisar_lancamentos(lancamentos)
-            
-            if estatistica is None:
-                print("Nenhum valor inserido.")
-            else:
-                mostrar_analise(estatistica)
+        resultado = tratar_opcao(opcao, lancamentos)
 
-        elif opcao == "3" :
-           lancamentos = limpar_lancamentos(lancamentos)
-            
-        elif opcao == "4" :
-            break 
+        if resultado is None and opcao == "4":
+            break
 
+        lancamentos = resultado
+        
 if __name__ == "__main__":
     main()
