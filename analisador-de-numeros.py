@@ -1,13 +1,17 @@
 
 def mostrar_menu():
 
-    print("***********************")
-    print("Escolha um opção")
+    linha()
+    print("ANALISADOR DE NÚMEROS")
+    linha()
     print("1 - Inserir novo valor")
-    print("2 - Analisar")
-    print("3 - Limpar")
+    print("2 - Analisar valores")
+    print("3 - Limpar valores")
     print("4 - Sair")
-    print("***********************")
+    linha()
+
+def linha():
+    print("=" * 40)
 
 def inserir_valor(lancamentos):
 
@@ -17,7 +21,7 @@ def inserir_valor(lancamentos):
         "valor": valor,
         
     })
-
+    print(f"Valor {valor} inserido com sucesso.")
     return lancamentos
 
 def analisar_lancamentos(lancamentos):
@@ -56,17 +60,28 @@ def analisar_lancamentos(lancamentos):
         }
 
 def mostrar_analise(estatistica):
-    print(f"A soma dos valores inseridos é de {estatistica['soma']}.")
-    print(f"Dos quais são {estatistica['pares']} Par e {estatistica['impares']} Ímpar.")
-    print(f"O maior valor inserido foi {estatistica['maior']}.")
-    print(f"A média dos valores inseridos é {estatistica['media']}.")
+    linha()
+    print("        ANÁLISE DOS VALORES")
+    linha()
+    print(f"A soma total: {estatistica['soma']}")
+    print(f"Pares: {estatistica['pares']}")
+    print(f"Ímpares: {estatistica['impares']}")
+    print(f"Maior valor: {estatistica['maior']}")
+    print(f"Média: {estatistica['media']:.2f}")
+    linha()
 
 def limpar_lancamentos(lancamentos):
+
+    if not lancamentos:
+        print("A lista já está vazia.")
+        return
+    
+
     confirmacao = input("Você realmente quer apagar todos os lançamentos? s/n ")
 
     if confirmacao == "s":
         lancamentos.clear()
-        print("A lista foi resetada.")
+        print("Todos os valores foram removidos.")
     
     elif confirmacao == "n":
         print("Operação cancelada.")
@@ -82,7 +97,7 @@ def ler_opcao():
 def tratar_opcao(opcao, lancamentos):
 
     if opcao == "1":
-           lancamentos = inserir_valor(lancamentos)
+           inserir_valor(lancamentos)
             
     elif opcao == "2" :
         estatistica = analisar_lancamentos(lancamentos)
@@ -96,11 +111,11 @@ def tratar_opcao(opcao, lancamentos):
         return limpar_lancamentos(lancamentos)
         
     elif opcao == "4" :
-        return None 
+        print("Encerrando o programa...")
+        return "Sair"
 
     else:
         print("Opção Ínvalida.")
-        return lancamentos
 
 def pedir_inteiro(mensagem):
     while True:
@@ -121,11 +136,11 @@ def main():
         print(" ")
 
         resultado = tratar_opcao(opcao, lancamentos)
+        input("\n Presione ENTER para continuar...")
 
-        if resultado is None and opcao == "4":
+        if resultado == "Sair":
             break
 
-        lancamentos = resultado
         
 if __name__ == "__main__":
     main()
