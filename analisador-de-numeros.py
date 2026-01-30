@@ -1,3 +1,7 @@
+import json
+import os
+
+arquivo_dados = "lancamentos.json"
 
 def mostrar_menu():
 
@@ -26,38 +30,52 @@ def inserir_valor(lancamentos):
 
 def analisar_lancamentos(lancamentos):
 
+    if not lancamentos:
+        return None
+    
     quant_impar = 0
     quant_par = 0
     soma = 0
+    menor = lancamentos[0]["valor"]
+    maior = lancamentos[0]["valor"]
 
-    if len(lancamentos) == 0:
-        return None
+    for item in lancamentos :
+        valor = item["valor"]
 
-    else :
-        maior = lancamentos[0]["valor"]
-        for item in lancamentos :
-            valor = item["valor"]
+        if valor % 2 == 0 :
+            quant_par += 1
 
-            if valor % 2 == 0 :
-                quant_par += 1
+        else :
+            quant_impar += 1
 
-            else :
-                quant_impar += 1
+        soma += valor
 
-            soma += valor
+        if valor > maior:
+            maior = valor
 
-            if valor > maior:
-                maior = valor
-        
-        media = soma / len(lancamentos)
+        if valor < menor:
+            menor = valor
+    
+    media = soma / len(lancamentos)
 
-        return {
-            "soma" : soma,
-            "pares" : quant_par,
-            "impares" : quant_impar,
-            "maior" : maior,
-            "media" : media
-        }
+    return {
+        "soma" : soma,
+        "pares" : quant_par,
+        "impares" : quant_impar,
+        "maior" : maior,
+        "menor" : menor,
+        "media" : media
+    }
+
+def menor_numero(lancamentos):
+    menor = lancamentos[0]["valor"]
+
+    for item in lancamentos:
+        valor = item["valor"]
+
+        if valor < menor:
+
+            return menor
 
 def mostrar_analise(estatistica):
     linha()
@@ -67,8 +85,19 @@ def mostrar_analise(estatistica):
     print(f"Pares: {estatistica['pares']}")
     print(f"Ímpares: {estatistica['impares']}")
     print(f"Maior valor: {estatistica['maior']}")
+    print(f"Menor valor: {estatistica['menor']}")
     print(f"Média: {estatistica['media']:.2f}")
     linha()
+
+def carregar_lancamentos():
+    if not os.path.exists(arquivo_dados):
+        return []
+    with open(arquivo_dados, "r", encoding="utf-8") as arquivo:
+        return json.load(arquivo)
+
+def salvar_lancamentos(lancamentos):
+    with open(arquivo_dados, "w", encoding="utf-8") as arquivo:
+        json.dump(lancamentos, arquivo, ensure_ascii=False, indent=4)
 
 def limpar_lancamentos(lancamentos):
 
@@ -111,6 +140,7 @@ def tratar_opcao(opcao, lancamentos):
         return limpar_lancamentos(lancamentos)
         
     elif opcao == "4" :
+        salvar_lancamentos(lancamentos)
         print("Encerrando o programa...")
         return "Sair"
 
@@ -128,7 +158,7 @@ def pedir_inteiro(mensagem):
             print("Valor ínvalido, insira um valor inteiro.")
 
 def main():
-    lancamentos = []
+    lancamentos = carregar_lancamentos()
     
     while True:
         mostrar_menu()
