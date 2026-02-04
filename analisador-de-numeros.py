@@ -21,10 +21,7 @@ def inserir_valor(lancamentos):
 
     valor = pedir_inteiro("Insira um valor inteiro: ")
 
-    lancamentos.append({
-        "valor": valor,
-        
-    })
+    lancamentos.append(valor)
     print(f"Valor {valor} inserido com sucesso.")
     return lancamentos
 
@@ -36,11 +33,10 @@ def analisar_lancamentos(lancamentos):
     quant_impar = 0
     quant_par = 0
     soma = 0
-    menor = lancamentos[0]["valor"]
-    maior = lancamentos[0]["valor"]
+    menor = lancamentos[0]
+    maior = lancamentos[0]
 
-    for item in lancamentos :
-        valor = item["valor"]
+    for valor in lancamentos :
 
         if valor % 2 == 0 :
             quant_par += 1
